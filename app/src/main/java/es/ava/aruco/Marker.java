@@ -60,6 +60,19 @@ public class Marker extends MatOfPoint2f implements Comparable<Marker>{
 	    if (total()!=4)
 	    	return;
 
+		int pp1w = 2 + lineWidth;
+		Point pp1 = points.get(topLeft);
+
+		Scalar col2 = color;
+		if (color.val.length > 2) {
+			col2 = new Scalar(color.val[1], color.val[0], color.val[2]);
+		}
+
+		Imgproc.line(in, new Point(pp1.x - pp1w, pp1.y - pp1w), new Point(pp1.x - pp1w, pp1.y + pp1w),  col2, lineWidth);
+		Imgproc.line(in, new Point(pp1.x - pp1w, pp1.y + pp1w), new Point(pp1.x + pp1w, pp1.y + pp1w),  col2, lineWidth);
+		Imgproc.line(in, new Point(pp1.x + pp1w, pp1.y + pp1w), new Point(pp1.x + pp1w, pp1.y - pp1w),  col2, lineWidth);
+		Imgproc.line(in, new Point(pp1.x + pp1w, pp1.y - pp1w), new Point(pp1.x - pp1w, pp1.y - pp1w),  col2, lineWidth);
+
 	    // TODO loop¿?
 	    for(int i=0;i<4;i++)
 			Imgproc.line(in, points.get(i), points.get((i+1)%4), color, lineWidth);
@@ -184,6 +197,7 @@ public class Marker extends MatOfPoint2f implements Comparable<Marker>{
 					code.set(x,y,0);
 			}
 		}
+
 	}
 	
 	/**
@@ -193,6 +207,8 @@ public class Marker extends MatOfPoint2f implements Comparable<Marker>{
 
 	 * @return the id of the marker
 	 */
+	private int topLeft = 0;
+
 	protected int calculateMarkerId(){
 		// check all the rotations of code
 		Code[] rotations = new Code[4];
@@ -200,6 +216,7 @@ public class Marker extends MatOfPoint2f implements Comparable<Marker>{
 		int[] dists = new int[4];
 		dists[0] = hammDist(rotations[0]);
 		int[] minDist = {dists[0],0};
+		topLeft = 0;
 		for(int i=1;i<4;i++){
 			// rotate
 			rotations[i] = Code.rotate(rotations[i-1]);
@@ -207,6 +224,7 @@ public class Marker extends MatOfPoint2f implements Comparable<Marker>{
 			if(dists[i] < minDist[0]){
 				minDist[0] = dists[i];
 				minDist[1] = i;
+				topLeft = i;
 			}
 		}
 		this.rotations = minDist[1];
