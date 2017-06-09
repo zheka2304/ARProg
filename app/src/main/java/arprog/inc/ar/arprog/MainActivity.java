@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
         for (Marker m: markers) {
             m.draw(mInput, new Scalar(255, 1, 1, 1), 1, true);
-            m.draw3dCube(mInput, parameters, new Scalar(1, 1, 255, 1));
+            //m.draw3dCube(mInput, parameters, new Scalar(1, 1, 255, 1));
         }
 
         return mInput;
