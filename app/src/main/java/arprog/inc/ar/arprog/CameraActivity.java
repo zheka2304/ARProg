@@ -14,12 +14,14 @@ import android.view.WindowManager;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.JavaCameraView;
 import org.opencv.core.Mat;
+import org.opencv.core.Size;
 
 import java.util.Vector;
 
 import es.ava.aruco.CameraParameters;
 import es.ava.aruco.Marker;
 import es.ava.aruco.MarkerDetector;
+import es.ava.aruco.exceptions.CPException;
 
 public class CameraActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
@@ -104,6 +106,8 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
 
     private Mat mFrame;
 
+    private int sWidth, sHeight;
+
     /**
      * This method is invoked when camera preview has started. After this method is invoked
      * the frames will start to be delivered to client via the onCameraFrame() callback.
@@ -114,6 +118,10 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
     @Override
     public void onCameraViewStarted(int width, int height) {
 
+        sWidth = width;
+        sHeight = height;
+
+        System.out.println("ARuco: Cam size: " + width + "x" + height);
     }
 
     /**
@@ -135,6 +143,9 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mFrame = inputFrame.rgba();
+
+        float focal_length = sWidth;
+        cameraParams.set(focal_length, focal_length, sWidth / 2f, sHeight / 2f);
 
         detectedMarkers.clear();
         markerDetector.detect(mFrame, detectedMarkers, cameraParams, markerSize);

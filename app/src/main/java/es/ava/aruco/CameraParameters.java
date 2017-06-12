@@ -32,7 +32,8 @@ public class CameraParameters {
 	
 	public CameraParameters(){
 		cameraMatrix = new Mat(3,3,CvType.CV_32FC1);
-		distorsionMatrix = new MatOfDouble();
+		distorsionMatrix = new MatOfDouble(4);
+		distorsionMatrix.fromArray(new double[]{0, 0, 0, 0});
 	}
 	
     /**Indicates whether this object is valid
@@ -48,7 +49,27 @@ public class CameraParameters {
 	public Mat getCameraMatrix(){
 		return cameraMatrix;
 	}
-	
+
+	public void set(float fx, float fy, float cx, float cy) {
+		float[] buff = {fx, 0, cx,
+						0, fy, cy,
+						0,  0, 1 };
+
+//		System.out.println("ARuco: cx = " + cx + ", cy = " + cy + ", fx = " + fx + ", fy = " + fy);
+//		System.out.println(distorsionMatrix.dump());
+
+
+//		cameraMatrix.put(0, 0, new float[]{fx});
+//		cameraMatrix.put(1, 1, new float[]{fy});
+//		cameraMatrix.put(0, 2, new float[]{cx});
+//		cameraMatrix.put(1, 2, new float[]{cy});
+//		cameraMatrix.put(2, 2, new float[]{1});
+
+		cameraMatrix.put(0, 0, buff);
+//
+//		System.out.println(distorsionMatrix.dump());
+	}
+
 	public MatOfDouble getDistCoeff(){
 		return distorsionMatrix;
 	}

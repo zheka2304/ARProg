@@ -88,8 +88,12 @@ public class Marker extends MatOfPoint2f implements Comparable<Marker>{
 	        cent.x/=4.;
 	        cent.y/=4.;
 
-			Imgproc.putText(in,cad, cent,Core.FONT_HERSHEY_SIMPLEX, 0.5,  color,2);
+			Imgproc.putText(in, cad,cent,Core.FONT_HERSHEY_PLAIN, 1.5, color, 2);
 	    }
+
+		//System.out.println(Tvec.dump());
+
+		//Imgproc.putText(in, "tr: " + Rvec.dump(), new Point(pp1.x, pp1.y - 12), Core.FONT_HERSHEY_SIMPLEX, 0.5, color, 2);
 	}
 	
 	/**
@@ -273,7 +277,12 @@ public class Marker extends MatOfPoint2f implements Comparable<Marker>{
 		MatOfPoint3f objPointsMat = new MatOfPoint3f();
 		objPointsMat.fromList(objPoints);
 		Calib3d.solvePnP(objPointsMat, this, camMatrix, distCoeffs, Rvec, Tvec);
+		//Calib3d.solvePnPRansac(objPointsMat, this, camMatrix, distCoeffs, Rvec, Tvec);
+
+
 //		Utils.rotateXAxis(Rvec);
+
+
 	}
 	
 	protected void setPoints(List<Point> p){
@@ -338,6 +347,10 @@ public class Marker extends MatOfPoint2f implements Comparable<Marker>{
 	
 	public void draw3dAxis(Mat frame, CameraParameters cp, Scalar color){
 		Utils.draw3dAxis(frame, cp, color, 2*ssize, Rvec, Tvec);
+	}
+
+	public void getModelViewMatrix() {
+
 	}
 	
 	public Object3dContainer object(){

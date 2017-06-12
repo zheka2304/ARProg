@@ -17,6 +17,7 @@ import org.opencv.core.Scalar;
 
 import java.util.Vector;
 
+import es.ava.aruco.CameraParameters;
 import es.ava.aruco.Marker;
 
 public class MainActivity extends AppCompatActivity{
@@ -50,7 +51,10 @@ public class MainActivity extends AppCompatActivity{
             public void onMarkersDetected(Vector<Marker> detectedMarkers, Mat inputFrame, CameraActivity currentActivity) {
                 for (Marker m:
                         detectedMarkers) {
-                    m.draw(inputFrame, new Scalar(1, 255, 1, 1), 1, true);
+                    m.draw(inputFrame, new Scalar(255, 1, 1, 1), 1, true);
+
+                    m.draw3dAxis(inputFrame, CameraActivity.getCameraParams(), new Scalar(255, 255, 1, 1));
+                    m.draw3dCube(inputFrame, CameraActivity.getCameraParams(), new Scalar(255, 255, 1, 1));
                 }
             }
 
