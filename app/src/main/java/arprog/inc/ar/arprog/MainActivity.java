@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity{
 
         requestCameraPermission();
 
+        CameraActivity.setMarkerSize(1);
         CameraActivity.setMarkerHandler(new IMarkerHandler() {
             @Override
             public void onMarkersDetected(Vector<Marker> detectedMarkers, Mat inputFrame, CameraActivity currentActivity) {

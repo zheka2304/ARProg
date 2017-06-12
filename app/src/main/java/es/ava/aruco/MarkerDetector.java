@@ -230,12 +230,34 @@ public class MarkerDetector {
 		for(int i=toRemove.size()-1;i>=0;i--)// done in inverse order in case we need to remove more than one element
 			if(toRemove.get(i) == 1)
 				newMarkers.remove(i);
-		
+
+
+		MarkerRegistry.startDetection();
+
 		// detect the position of markers if desired
-		for(int i=0;i<newMarkers.size();i++){
-			if(cp.isValid())
-				newMarkers.get(i).calculateExtrinsics(cp.getCameraMatrix(), cp.getDistCoeff(), markerSizeMeters);
-		}
+		if(cp.isValid())
+			for(int i=0;i<newMarkers.size();i++){
+				// get stored data
+				Marker marker = newMarkers.get(i);
+				MarkerRegistry.MarkerData data = MarkerRegistry.getMarkerData(marker);
+
+				// if some data is stored, get it
+				boolean useExtrinsicGuess = false;
+				if (data != null) {
+					data.setTo(marker);
+					useExtrinsicGuess = true;
+				}
+				// and use in detection
+				newMarkers.get(i).calculateExtrinsics(cp.getCameraMatrix(), cp.getDistCoeff(), markerSizeMeters, useExtrinsicGuess);
+
+				if (data != null) {
+					newMarkers.get(i).Rvec = data.getStabilizedRVec(newMarkers.get(i).Rvec);
+				}
+				// update data
+				MarkerRegistry.addMarker(newMarkers.get(i));
+			}
+
+		MarkerRegistry.endDetection();
 		detectedMarkers.setSize(newMarkers.size());
 		Collections.copy(detectedMarkers, newMarkers);
 	}

@@ -36,8 +36,8 @@ public class Marker extends MatOfPoint2f implements Comparable<Marker>{
 	private Code code; // a matrix of integer representing the code (see the class to further explanation)
 	
 	private Mat mat; // the cvMat of the CANONICAL marker (not the one taken from the capture)
-	private Mat Rvec;
-	private Mat Tvec;
+	public Mat Rvec;
+	public Mat Tvec;
 	
 	private Vector<Point> points;
 	
@@ -263,7 +263,7 @@ public class Marker extends MatOfPoint2f implements Comparable<Marker>{
 	 * This method fills in these matrix properly.
 	 * @param camMatrix
 	 */
-	protected void calculateExtrinsics(Mat camMatrix, MatOfDouble distCoeffs, float sizeMeters){
+	protected void calculateExtrinsics(Mat camMatrix, MatOfDouble distCoeffs, float sizeMeters, boolean useExtrinsicGuess){
 		// TODO check params
 		
 		// set the obj 3D points
@@ -274,9 +274,18 @@ public class Marker extends MatOfPoint2f implements Comparable<Marker>{
 		objPoints.add(new Point3( halfSize,  halfSize,0));
 		objPoints.add(new Point3( halfSize, -halfSize,0));
 
+		List<Point> imgPoints = new ArrayList<Point>();
+		for (int i = 0; i < 4; i++) {
+			imgPoints.add(0, this.points.get((i + topLeft) % 4));
+		}
+
 		MatOfPoint3f objPointsMat = new MatOfPoint3f();
 		objPointsMat.fromList(objPoints);
-		Calib3d.solvePnP(objPointsMat, this, camMatrix, distCoeffs, Rvec, Tvec);
+		MatOfPoint2f imgPointsMat = new MatOfPoint2f();
+		imgPointsMat.fromList(imgPoints);
+
+		//Calib3d.solvePnP(objPointsMat, imgPointsMat, camMatrix, distCoeffs, Rvec, Tvec);
+		Calib3d.solvePnP(objPointsMat, imgPointsMat, camMatrix, distCoeffs, Rvec, Tvec, useExtrinsicGuess, Calib3d.CV_ITERATIVE);
 		//Calib3d.solvePnPRansac(objPointsMat, this, camMatrix, distCoeffs, Rvec, Tvec);
 
 
