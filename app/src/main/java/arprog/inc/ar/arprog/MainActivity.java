@@ -8,7 +8,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.SurfaceView;
 import android.view.View;
 
 import org.opencv.android.OpenCVLoader;
@@ -17,7 +16,6 @@ import org.opencv.core.Scalar;
 
 import java.util.Vector;
 
-import es.ava.aruco.CameraParameters;
 import es.ava.aruco.Marker;
 
 public class MainActivity extends AppCompatActivity{
@@ -47,7 +45,7 @@ public class MainActivity extends AppCompatActivity{
         requestCameraPermission();
 
         CameraActivity.setMarkerSize(1);
-        CameraActivity.setMarkerHandler(new IMarkerHandler() {
+        CameraActivity.addMarkerHandler(new IMarkerHandler() {
             @Override
             public void onMarkersDetected(Vector<Marker> detectedMarkers, Mat inputFrame, CameraActivity currentActivity) {
                 for (Marker m:

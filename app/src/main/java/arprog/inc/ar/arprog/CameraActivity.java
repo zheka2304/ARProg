@@ -8,29 +8,34 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.SurfaceView;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.JavaCameraView;
 import org.opencv.core.Mat;
-import org.opencv.core.Size;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
+import arprog.inc.ar.opengl.ARSurfaceView;
 import es.ava.aruco.CameraParameters;
 import es.ava.aruco.Marker;
 import es.ava.aruco.MarkerDetector;
-import es.ava.aruco.exceptions.CPException;
 
 public class CameraActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
     private JavaCameraView cameraView;
+    private ARSurfaceView arSurfaceView;
 
     private MarkerDetector markerDetector = new MarkerDetector();
     private Vector<Marker> detectedMarkers = new Vector<Marker>();
 
-    private static IMarkerHandler markerHandler;
+    private static List<IMarkerHandler> markerHandlers = new ArrayList<IMarkerHandler>();
     private static CameraParameters cameraParams = new CameraParameters();
     private static float markerSize = 1f;
     private static int maxResolution = 480;
@@ -43,8 +48,12 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
         return cameraParams;
     }
 
-    public static void setMarkerHandler(IMarkerHandler handler) {
-        markerHandler = handler;
+    public static void addMarkerHandler(IMarkerHandler handler) {
+        markerHandlers.add(handler);
+    }
+
+    public static void removeAllMarkerHandlers() {
+        markerHandlers.clear();
     }
 
     public static void setMaxResolutionDimension(int maxRes) {
@@ -82,6 +91,7 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
         cameraView.setMaxFrameSize(width, height);
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,13 +104,20 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
 
         requestCameraPermission();
 
+        // find by ids
+        FrameLayout layout = (FrameLayout) findViewById(R.id.camera_layout);
         cameraView = (JavaCameraView) findViewById(R.id.camera_view);
+
+        // setup camera view
         cameraView.setCvCameraViewListener(this);
         cameraView.setVisibility(SurfaceView.VISIBLE);
-
         setMaxResolution();
-
         cameraView.enableView();
+
+        // setup AR (GL) SurfaceView
+        arSurfaceView = new ARSurfaceView(this);
+        addMarkerHandler(arSurfaceView.getRenderer());
+        layout.addView(arSurfaceView, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
 
@@ -117,9 +134,11 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
      */
     @Override
     public void onCameraViewStarted(int width, int height) {
-
         sWidth = width;
         sHeight = height;
+
+        float focal_length = sWidth;
+        cameraParams.set(focal_length, focal_length, sWidth / 2f, sHeight / 2f);
 
         System.out.println("ARuco: Cam size: " + width + "x" + height);
     }
@@ -144,17 +163,14 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mFrame = inputFrame.rgba();
 
-        float focal_length = sWidth;
-        cameraParams.set(focal_length, focal_length, sWidth / 2f, sHeight / 2f);
-
         detectedMarkers.clear();
         markerDetector.detect(mFrame, detectedMarkers, cameraParams, markerSize);
 
-        if (markerHandler != null)
+        for(IMarkerHandler handler : markerHandlers)
             if (detectedMarkers.size() > 0)
-                markerHandler.onMarkersDetected(detectedMarkers, mFrame, this);
+                handler.onMarkersDetected(detectedMarkers, mFrame, this);
             else
-                markerHandler.onNothingDetected(mFrame, this);
+                handler.onNothingDetected(mFrame, this);
 
         return mFrame;
     }
