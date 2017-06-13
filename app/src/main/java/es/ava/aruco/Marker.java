@@ -90,10 +90,6 @@ public class Marker extends MatOfPoint2f implements Comparable<Marker>{
 
 			Imgproc.putText(in, cad,cent,Core.FONT_HERSHEY_PLAIN, 1.5, color, 2);
 	    }
-
-		//System.out.println(Tvec.dump());
-
-		//Imgproc.putText(in, "tr: " + Rvec.dump(), new Point(pp1.x, pp1.y - 12), Core.FONT_HERSHEY_SIMPLEX, 0.5, color, 2);
 	}
 	
 	/**

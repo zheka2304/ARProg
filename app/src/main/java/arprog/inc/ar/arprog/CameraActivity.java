@@ -115,6 +115,7 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
         cameraView.enableView();
 
         // setup AR (GL) SurfaceView
+        // TODO: arSurfaceView must be sized and positioned exactly at camera preview to correct projection
         arSurfaceView = new ARSurfaceView(this);
         addMarkerHandler(arSurfaceView.getRenderer());
         layout.addView(arSurfaceView, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -123,7 +124,7 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
 
     private Mat mFrame;
 
-    private int sWidth, sHeight;
+    public static int sWidth, sHeight;
 
     /**
      * This method is invoked when camera preview has started. After this method is invoked
@@ -137,7 +138,7 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
         sWidth = width;
         sHeight = height;
 
-        float focal_length = sWidth;
+        float focal_length = sWidth / 2f;
         cameraParams.set(focal_length, focal_length, sWidth / 2f, sHeight / 2f);
 
         System.out.println("ARuco: Cam size: " + width + "x" + height);

@@ -16,6 +16,7 @@ import org.opencv.core.Scalar;
 
 import java.util.Vector;
 
+import arprog.inc.ar.opengl.ShaderHelper;
 import es.ava.aruco.Marker;
 
 public class MainActivity extends AppCompatActivity{
@@ -35,10 +36,12 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    private Activity self;
+    public static Activity current;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        current = this;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -63,14 +66,14 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-        self = this;
         findViewById(R.id.start_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(self, CameraActivity.class);
-                startActivity(intent);
+            Intent intent = new Intent(current, CameraActivity.class);
+            startActivity(intent);
             }
         });
+
     }
 
 

@@ -30,6 +30,8 @@ public class ARSurfaceView extends GLSurfaceView {
         getHolder().setFormat(PixelFormat.RGBA_8888);
         renderer = new ARRenderer();
         setRenderer(renderer);
+
+        setRenderMode(RENDERMODE_CONTINUOUSLY);
     }
 
     public ARRenderer getRenderer() {
