@@ -55,8 +55,8 @@ public class MainActivity extends AppCompatActivity{
                         detectedMarkers) {
                     m.draw(inputFrame, new Scalar(255, 1, 1, 1), 1, true);
 
-                    m.draw3dAxis(inputFrame, CameraActivity.getCameraParams(), new Scalar(255, 255, 1, 1));
-                    m.draw3dCube(inputFrame, CameraActivity.getCameraParams(), new Scalar(255, 255, 1, 1));
+                    //m.draw3dAxis(inputFrame, CameraActivity.getCameraParams(), new Scalar(255, 255, 1, 1));
+                    //m.draw3dCube(inputFrame, CameraActivity.getCameraParams(), new Scalar(255, 255, 1, 1));
                 }
             }
 

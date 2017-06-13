@@ -3,6 +3,7 @@ package es.ava.aruco;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -70,11 +71,15 @@ public class MarkerRegistry {
     */
     public static void endDetection() {
         Set<Integer> keys = markerData.keySet();
-        for (int id: keys) {
-            if (!markerLock.containsKey(id))
-                markerData.remove(id);
-            else if (markerLock.get(id))
-                markerData.remove(id);
+        try {
+            for (int id : keys) {
+                if (!markerLock.containsKey(id))
+                    markerData.remove(id);
+                else if (markerLock.get(id))
+                    markerData.remove(id);
+            }
+        } catch (ConcurrentModificationException e) {
+            markerData.clear();
         }
     }
 

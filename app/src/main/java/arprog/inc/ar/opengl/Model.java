@@ -39,9 +39,13 @@ public class Model {
             uvs = new ArrayList<Float>();
     }
 
+    public Model() {
+        this(false, false);
+    }
+
     /**
      * clears all array lists
-     * it will not clear render buffers, so to clear model fully you need to call compile() after clear()
+     * it will not clear render buffers, so to clear testModel fully you need to call compile() after clear()
      */
     public void clear() {
         vertices.clear();
@@ -90,21 +94,40 @@ public class Model {
         return buffer;
     }
 
+    private TextureHelper.Texture currentTexture;
+    public void setTexture(TextureHelper.Texture texture) {
+        currentTexture = texture;
+    }
+
     /**
-     * renders model
-     * @param shader shader to use
+     * renders testModel
+     * @param shader testShader to use
      */
     public void draw(ShaderHelper.Shader shader, MVPMatrix matrix) {
         shader.use();
 
         int positionHandle = shader.getAttribLocation(shader.attributeNames.getPositionName());
         int colorHandle = shader.getAttribLocation(shader.attributeNames.getColorName());
+        int normalHandle = shader.getAttribLocation(shader.attributeNames.getNormalName());
+        int uvHandle = shader.getAttribLocation(shader.attributeNames.getUVName());
 
         GLES20.glEnableVertexAttribArray(positionHandle);
         GLES20.glEnableVertexAttribArray(colorHandle);
+        GLES20.glEnableVertexAttribArray(normalHandle);
+        GLES20.glEnableVertexAttribArray(uvHandle);
 
         GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, COORDS_PER_VERTEX * BYTES_PER_FLOAT, bVertices);
         GLES20.glVertexAttribPointer(colorHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, COORDS_PER_VERTEX * BYTES_PER_FLOAT, bColors);
+        if (useNormals)
+            GLES20.glVertexAttribPointer(normalHandle, NORMAL_COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, NORMAL_COORDS_PER_VERTEX * BYTES_PER_FLOAT, bNormals);
+        if (useUVs) {
+            GLES20.glVertexAttribPointer(uvHandle, UV_COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, UV_COORDS_PER_VERTEX * BYTES_PER_FLOAT, bUVs);
+        }
+
+        if (currentTexture != null) {
+            int textureHandle = shader.getUniformLocation(shader.attributeNames.getTextureName());
+            currentTexture.use(textureHandle);
+        }
 
         int matrixHandle = shader.getUniformLocation(shader.attributeNames.getMatrixName());
         GLES20.glUniformMatrix4fv(matrixHandle, 1, false, matrix.getMVP(), 0);
@@ -132,10 +155,16 @@ public class Model {
 
     public void normal3f(float x, float y, float z) {
         if (useNormals) {
-            vertices.add(x);
-            vertices.add(y);
-            vertices.add(z);
+            normals.add(x);
+            normals.add(y);
+            normals.add(z);
         }
     }
 
+    public void uv2f(float x, float y) {
+        if (useUVs) {
+            uvs.add(x);
+            uvs.add(y);
+        }
+    }
 }

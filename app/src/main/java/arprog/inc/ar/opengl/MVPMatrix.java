@@ -49,6 +49,8 @@ public class MVPMatrix {
     public void fromMarker (Marker marker) {
         // load identity
         identity();
+        // look towards z+
+        lookAt(0, 0, 0, 0, 0, 1, 0, 1, 0);
 
         // get and fix rotation vector
         double[] r = MarkerRegistry.MatToList(marker.Rvec);

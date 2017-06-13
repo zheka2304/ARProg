@@ -59,7 +59,7 @@ public class TextureManager
 	 */
 	public String addTextureId(Bitmap $b, String $id, boolean $generateMipMap)
 	{
-		if (_idToTextureName.containsKey($id)) throw new Error("Texture id \"" + $id + "\" already exists."); 
+		if (_idToTextureName.containsKey($id)) throw new Error("TextureHelper id \"" + $id + "\" already exists.");
 
 		int glId = Shared.renderer().uploadTextureAndReturnId($b, $generateMipMap);
 

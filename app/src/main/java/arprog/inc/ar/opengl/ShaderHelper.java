@@ -53,7 +53,7 @@ public class ShaderHelper {
         }
 
         /**
-         * loads and compiles shader source
+         * loads and compiles testShader source
          */
         public void compile() {
             String vertexSource = readResource(vertexResource);
@@ -74,7 +74,7 @@ public class ShaderHelper {
         }
 
         /**
-         * uses current shader
+         * uses current testShader
         */
         public void use() {
             if (isLoaded) {
@@ -105,6 +105,7 @@ public class ShaderHelper {
         public String getUVName();
 
         public String getMatrixName();
+        public String getTextureName();
     }
 
     public static Shader createShader(int vertex, int fragment, IAttributeNames names) {
@@ -139,6 +140,11 @@ public class ShaderHelper {
             @Override
             public String getMatrixName() {
                 return "mvpMatrix";
+            }
+
+            @Override
+            public String getTextureName() {
+                return "TEXTURE";
             }
         });
     }
