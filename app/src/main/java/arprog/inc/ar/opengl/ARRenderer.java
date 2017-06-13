@@ -47,6 +47,7 @@ public class ARRenderer implements Renderer, IMarkerHandler{
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0, 0, 0, 0);
+
         shader = ShaderHelper.createShader(R.raw.default_vertex, R.raw.default_fragment);
         model = new Model(false, false);
         model.color4f(1, 0, 0, 1);
@@ -69,8 +70,6 @@ public class ARRenderer implements Renderer, IMarkerHandler{
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         matrix.frustum(width, height, 1, 100);
-
-        System.out.println(width + "x" + height);
     }
 
     @Override

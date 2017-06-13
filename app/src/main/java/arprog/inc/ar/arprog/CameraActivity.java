@@ -31,6 +31,7 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
 
     private JavaCameraView cameraView;
     private ARSurfaceView arSurfaceView;
+    private FrameLayout frameLayout;
 
     private MarkerDetector markerDetector = new MarkerDetector();
     private Vector<Marker> detectedMarkers = new Vector<Marker>();
@@ -105,7 +106,7 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
         requestCameraPermission();
 
         // find by ids
-        FrameLayout layout = (FrameLayout) findViewById(R.id.camera_layout);
+        frameLayout = (FrameLayout) findViewById(R.id.camera_layout);
         cameraView = (JavaCameraView) findViewById(R.id.camera_view);
 
         // setup camera view
@@ -114,11 +115,40 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
         setMaxResolution();
         cameraView.enableView();
 
+    }
+
+    private void setupARSurfaceView() {
+        // calculate view size by camera preview size
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        int height = metrics.heightPixels;
+        int width = metrics.widthPixels;
+
+        double widthRatio = width / (double) sWidth;
+        double heightRatio = height / (double) sHeight;
+
+        int wWidth = 0, wHeight = 0;
+
+        if (sWidth * heightRatio > width) {
+            wWidth = (int) (sWidth * widthRatio);
+            wHeight = (int) (sHeight * widthRatio);
+        }
+        else {
+            wWidth = (int) (sWidth * heightRatio);
+            wHeight = (int) (sHeight * heightRatio);
+        }
+
         // setup AR (GL) SurfaceView
         // TODO: arSurfaceView must be sized and positioned exactly at camera preview to correct projection
         arSurfaceView = new ARSurfaceView(this);
         addMarkerHandler(arSurfaceView.getRenderer());
-        layout.addView(arSurfaceView, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+        arSurfaceView.setX((width - wWidth) / 2);
+        arSurfaceView.setY((height - wHeight) / 2);
+        arSurfaceView.setLayoutParams(new RelativeLayout.LayoutParams(wWidth, wHeight));
+
+        frameLayout.addView(arSurfaceView);
     }
 
 
@@ -138,10 +168,12 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
         sWidth = width;
         sHeight = height;
 
-        float focal_length = sWidth / 2f;
+        float focal_length = sHeight / 2f;
         cameraParams.set(focal_length, focal_length, sWidth / 2f, sHeight / 2f);
-
         System.out.println("ARuco: Cam size: " + width + "x" + height);
+
+        // setup AR surface view
+        setupARSurfaceView();
     }
 
     /**
