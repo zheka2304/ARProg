@@ -22,6 +22,8 @@ import es.ava.aruco.exceptions.CPException;
  */
 public class CameraParameters {
 
+	public static final float DEFAULT_FOV = 60;
+
 	// cameraMatrix will be of the form
 	// | Fx 0  Cx |
 	// | 0  Fy Cy |

@@ -105,6 +105,7 @@ public class ShaderHelper {
         public String getUVName();
 
         public String getMatrixName();
+        public String getLocalMatrixName();
         public String getTextureName();
     }
 
@@ -140,6 +141,11 @@ public class ShaderHelper {
             @Override
             public String getMatrixName() {
                 return "mvpMatrix";
+            }
+
+            @Override
+            public String getLocalMatrixName() {
+                return "localMatrix";
             }
 
             @Override

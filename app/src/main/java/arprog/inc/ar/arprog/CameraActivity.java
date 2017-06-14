@@ -168,7 +168,9 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
         sWidth = width;
         sHeight = height;
 
-        float focal_length = sHeight / 2f;
+        float fov = CameraParameters.DEFAULT_FOV;
+        float focal_length = (sHeight / 2) / (float) Math.tan(fov / 360.0 * Math.PI);
+
         cameraParams.set(focal_length, focal_length, sWidth / 2f, sHeight / 2f);
         System.out.println("ARuco: Cam size: " + width + "x" + height);
 

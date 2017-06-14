@@ -42,22 +42,22 @@ public class ARRenderer implements Renderer, IMarkerHandler{
         testShader = ShaderHelper.createShader(R.raw.default_vertex, R.raw.default_fragment);
 
         testModel = new Model(false, true);
-        testModel.color4f(1, 0, 0, 1);
+        testModel.color4f(1, 1, 1, 1);
         testModel.uv2f(0, 0);
         testModel.vertex3f(-.5f, -.5f, 0);
-        testModel.color4f(0, 1, 0, 1);
+        testModel.color4f(1, 1, 1, 1);
         testModel.uv2f(1, 0);
         testModel.vertex3f(.5f, -.5f, 0);
-        testModel.color4f(0, 0, 1, 1);
+        testModel.color4f(1, 1, 1, 1);
         testModel.uv2f(1, 1);
         testModel.vertex3f(.5f, .5f, 0);
-        testModel.color4f(1, 0, 0, 1);
+        testModel.color4f(1, 1, 1, 1);
         testModel.uv2f(0, 0);
         testModel.vertex3f(-.5f, -.5f, 0);
-        testModel.color4f(0, 1, 0, 1);
+        testModel.color4f(1, 1, 1, 1);
         testModel.uv2f(0, 1);
         testModel.vertex3f(-.5f, .5f, 0);
-        testModel.color4f(0, 0, 1, 1);
+        testModel.color4f(1, 1, 1, 1);
         testModel.uv2f(1, 1);
         testModel.vertex3f(.5f, .5f, 0);
         testModel.compile();
@@ -96,8 +96,13 @@ public class ARRenderer implements Renderer, IMarkerHandler{
         // switch to markers CS
         mvpMatrix.fromMarker(marker);
 
-        // draw test testModel
-        testModel.draw(testShader, mvpMatrix);
+        for (int i  = 0; i < 100; i++) {
+            mvpMatrix.translate(0, 0, .01f);
+            mvpMatrix.rotate(0, 0, 1f * i);
+
+            // draw test testModel
+            testModel.draw(testShader, mvpMatrix);
+        }
     }
 
 }

@@ -129,8 +129,10 @@ public class Model {
             currentTexture.use(textureHandle);
         }
 
-        int matrixHandle = shader.getUniformLocation(shader.attributeNames.getMatrixName());
-        GLES20.glUniformMatrix4fv(matrixHandle, 1, false, matrix.getMVP(), 0);
+        int matrixHandle1 = shader.getUniformLocation(shader.attributeNames.getMatrixName());
+        GLES20.glUniformMatrix4fv(matrixHandle1, 1, false, matrix.getMVP(), 0);
+        int matrixHandle2 = shader.getUniformLocation(shader.attributeNames.getLocalMatrixName());
+        GLES20.glUniformMatrix4fv(matrixHandle2, 1, false, matrix.getLocal(), 0);
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
 
