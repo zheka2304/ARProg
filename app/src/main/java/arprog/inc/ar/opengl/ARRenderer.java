@@ -38,6 +38,8 @@ public class ARRenderer implements Renderer, IMarkerHandler{
     ShaderHelper.Shader testShader;
     Model testModel;
 
+    ModelProjectorLight projectorModel;
+
     private void prepareTestData() {
         testShader = ShaderHelper.createShader(R.raw.default_vertex, R.raw.default_fragment);
 
@@ -69,6 +71,9 @@ public class ARRenderer implements Renderer, IMarkerHandler{
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0, 0, 0, 0);
 
+        projectorModel = new ModelProjectorLight();
+        projectorModel.setColor(.5f, .5f, 1f);
+
         prepareTestData();
     }
 
@@ -93,16 +98,14 @@ public class ARRenderer implements Renderer, IMarkerHandler{
     }
 
     private void onMarkerRendered(Marker marker) {
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+
         // switch to markers CS
         mvpMatrix.fromMarker(marker);
 
-        for (int i  = 0; i < 100; i++) {
-            mvpMatrix.translate(0, 0, .01f);
-            mvpMatrix.rotate(0, 0, 1f * i);
-
-            // draw test testModel
-            testModel.draw(testShader, mvpMatrix);
-        }
+        projectorModel.draw(mvpMatrix);
     }
 
 }
