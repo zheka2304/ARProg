@@ -16,7 +16,7 @@ public class ModelProjectorLight extends Model {
         super(false, false);
 
         if (shader == null) {
-            shader = ShaderHelper.createShader(R.raw.projector_vertex, R.raw.projector_fragment);
+            shader = RenderData.getShader("projector");
         }
     }
 

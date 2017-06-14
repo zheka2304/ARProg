@@ -42,16 +42,16 @@ public class ARRenderer implements Renderer, IMarkerHandler{
     ModelProjectorLight projectorModel;
 
     private void prepareTestData() {
-        testShader = ShaderHelper.createShader(R.raw.model_vertex, R.raw.model_fragment);
-
-        testModel = ModelLoader.asObj(MainActivity.current.getResources().openRawResource(R.raw.cow), .1f);
-
-        testModel.setTexture(TextureHelper.loadTexture(R.drawable.ar_icon_contrast));
+        testShader = RenderData.getShader("model");
+        testModel = RenderData.getModel("cow.obj");
+        //testModel.setTexture(RenderData.getTexture("model_texture_owl"));
     }
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0, 0, 0, 0);
+
+        RenderData.prepareAllAssets();
 
         projectorModel = new ModelProjectorLight();
         projectorModel.setColor(.5f, .5f, 1f);
@@ -90,6 +90,7 @@ public class ARRenderer implements Renderer, IMarkerHandler{
         projectorModel.draw(mvpMatrix);
 
         mvpMatrix.translate(0, 0, .8f);
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ZERO);
         testModel.draw(testShader, mvpMatrix);
     }
 

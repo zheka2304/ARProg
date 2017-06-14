@@ -125,9 +125,12 @@ public class Model {
             GLES20.glVertexAttribPointer(uvHandle, UV_COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, UV_COORDS_PER_VERTEX * BYTES_PER_FLOAT, bUVs);
         }
 
+        int textureHandle = shader.getUniformLocation(shader.attributeNames.getTextureName());
         if (currentTexture != null) {
-            int textureHandle = shader.getUniformLocation(shader.attributeNames.getTextureName());
             currentTexture.use(textureHandle);
+        }
+        else {
+            RenderData.FLAT_WHITE.use(textureHandle);
         }
 
         int matrixHandle1 = shader.getUniformLocation(shader.attributeNames.getMatrixName());
