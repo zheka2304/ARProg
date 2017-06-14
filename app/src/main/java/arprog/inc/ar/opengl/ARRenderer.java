@@ -5,6 +5,8 @@ import android.opengl.GLSurfaceView.Renderer;
 
 import org.opencv.core.Mat;
 
+import java.util.HashMap;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -21,17 +23,18 @@ import es.ava.aruco.Marker;
  */
 
 public class ARRenderer implements Renderer, IMarkerHandler{
-    private Vector<Marker> markers = new Vector<Marker>();
+    private HashMap<Integer, Marker> markersToRender = new HashMap<Integer, Marker>();
+
     @Override
     public void onMarkersDetected(Vector<Marker> detectedMarkers, Mat inputFrame, CameraActivity currentActivity) {
-        markers.clear();
-        for (Marker marker : detectedMarkers)
-            markers.add(marker);
+        for (Marker marker : detectedMarkers) {
+            markersToRender.put(marker.getMarkerId(), marker);
+        }
     }
 
     @Override
     public void onNothingDetected(Mat inputFrame, CameraActivity currentActivity) {
-        markers.clear();
+
     }
 
     private MVPMatrix mvpMatrix = new MVPMatrix();
@@ -64,18 +67,28 @@ public class ARRenderer implements Renderer, IMarkerHandler{
         mvpMatrix.frustum(width, height, .01f, 100);
     }
 
+    public static final long ERROR_TIME_MILLIS = 100;
+
     @Override
     public void onDrawFrame(GL10 gl) {
         // init frame
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         try {
-            for (int i = 0; i < markers.size(); i++) {
-                Marker marker = markers.get(i);
-                onMarkerRendered(marker);
+            long currentTime = System.currentTimeMillis();
+            Set<Integer> markerIds = markersToRender.keySet();
+
+            for (int id : markerIds) {
+                Marker marker = markersToRender.get(id);
+                if (marker.updatedTime + ERROR_TIME_MILLIS < currentTime) {
+                    markersToRender.remove(id);
+                }
+                else
+                    onMarkerRendered(marker);
             }
-        } catch (ArrayIndexOutOfBoundsException e) {
-            ;
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
