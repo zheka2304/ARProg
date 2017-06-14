@@ -12,6 +12,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import arprog.inc.ar.arprog.CameraActivity;
 import arprog.inc.ar.arprog.IMarkerHandler;
+import arprog.inc.ar.arprog.MainActivity;
 import arprog.inc.ar.arprog.R;
 import es.ava.aruco.Marker;
 
@@ -41,28 +42,9 @@ public class ARRenderer implements Renderer, IMarkerHandler{
     ModelProjectorLight projectorModel;
 
     private void prepareTestData() {
-        testShader = ShaderHelper.createShader(R.raw.default_vertex, R.raw.default_fragment);
+        testShader = ShaderHelper.createShader(R.raw.model_vertex, R.raw.model_fragment);
 
-        testModel = new Model(false, true);
-        testModel.color4f(1, 1, 1, 1);
-        testModel.uv2f(0, 0);
-        testModel.vertex3f(-.5f, -.5f, 0);
-        testModel.color4f(1, 1, 1, 1);
-        testModel.uv2f(1, 0);
-        testModel.vertex3f(.5f, -.5f, 0);
-        testModel.color4f(1, 1, 1, 1);
-        testModel.uv2f(1, 1);
-        testModel.vertex3f(.5f, .5f, 0);
-        testModel.color4f(1, 1, 1, 1);
-        testModel.uv2f(0, 0);
-        testModel.vertex3f(-.5f, -.5f, 0);
-        testModel.color4f(1, 1, 1, 1);
-        testModel.uv2f(0, 1);
-        testModel.vertex3f(-.5f, .5f, 0);
-        testModel.color4f(1, 1, 1, 1);
-        testModel.uv2f(1, 1);
-        testModel.vertex3f(.5f, .5f, 0);
-        testModel.compile();
+        testModel = ModelLoader.asObj(MainActivity.current.getResources().openRawResource(R.raw.cow), .1f);
 
         testModel.setTexture(TextureHelper.loadTexture(R.drawable.ar_icon_contrast));
     }
@@ -106,6 +88,9 @@ public class ARRenderer implements Renderer, IMarkerHandler{
         mvpMatrix.fromMarker(marker);
 
         projectorModel.draw(mvpMatrix);
+
+        mvpMatrix.translate(0, 0, .8f);
+        testModel.draw(testShader, mvpMatrix);
     }
 
 }

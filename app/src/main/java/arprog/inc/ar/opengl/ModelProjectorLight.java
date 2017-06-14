@@ -37,7 +37,7 @@ public class ModelProjectorLight extends Model {
             float x = random.nextFloat() * 10 - 5;
             float z = random.nextFloat() * 10 - 5;
 
-            float h = 0.8f;
+            float h = 0.6f + random.nextFloat() * 0.6f;
             float d = 0.2f + random.nextFloat() * 0.8f;
             float angle = random.nextFloat() * 100f + (float) Math.sin((System.currentTimeMillis() % (62820)) * 0.0001f) * (.5f + random.nextFloat());
 
