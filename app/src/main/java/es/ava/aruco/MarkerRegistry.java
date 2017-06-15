@@ -45,9 +45,9 @@ public class MarkerRegistry {
             double[] newVec = MatToList(newTvec);
             double[] oldVec = MatToList(Tvec);
 
-            double t = 0.04;
+            double t = 0.02;
             double d = Math.max(Math.max(Math.abs(oldVec[0] - newVec[0]), Math.abs(oldVec[1] - newVec[1])), Math.abs(oldVec[2] - newVec[2]));
-            double k = d > t ? 0.9 : 0.4;
+            double k = d > t ? 1 : 0.4;
             return ListToMat(new double[] {
                     newVec[0] * k + oldVec[0] * (1 - k),
                     newVec[1] * k + oldVec[1] * (1 - k),

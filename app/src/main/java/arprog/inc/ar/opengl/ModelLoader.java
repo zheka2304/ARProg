@@ -77,7 +77,7 @@ public class ModelLoader {
         }
     }
 
-    public static Model asObj(InputStream inputStream, float scale) {
+    public static Model asObj(InputStream inputStream, float scale, boolean fixedSize) {
         String line;
         String[] splittedLine;
 
@@ -87,6 +87,10 @@ public class ModelLoader {
         ArrayList<Vec3> uvs = new ArrayList<Vec3>(); uvs.add(new Vec3(0, 0, 0));
         Model model = new Model(true, true);
 
+        Vec3 vTranslation = new Vec3(0, 0, 0);
+        Vec3 vScale = new Vec3(1, 1, 1);
+        Vec3 vMax = new Vec3(-99999, -99999, -99999);
+        Vec3 vMin = new Vec3(99999, 99999, 99999);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         try {
@@ -95,10 +99,27 @@ public class ModelLoader {
 
                 if (splittedLine.length != 0) {
                     if (splittedLine[0].equals("v")) {
+                        Vec3 vertex;
                         if (SWAP_ZY)
-                            vertices.add(new Vec3(Float.valueOf(splittedLine[1]) * scale, Float.valueOf(splittedLine[3]) * scale, Float.valueOf(splittedLine[2]) * scale));
+                            vertex = (new Vec3(Float.valueOf(splittedLine[1]) * scale, Float.valueOf(splittedLine[3]) * scale, Float.valueOf(splittedLine[2]) * scale));
                         else
-                            vertices.add(new Vec3(Float.valueOf(splittedLine[1]) * scale, Float.valueOf(splittedLine[2]) * scale, Float.valueOf(splittedLine[3]) * scale));
+                            vertex = (new Vec3(Float.valueOf(splittedLine[1]) * scale, Float.valueOf(splittedLine[2]) * scale, Float.valueOf(splittedLine[3]) * scale));
+                        vertices.add(vertex);
+
+                        if (fixedSize) {
+                            if (vertex.x > vMax.x)
+                                vMax.x = vertex.x;
+                            if (vertex.x < vMin.x)
+                                vMin.x = vertex.x;
+                            if (vertex.y > vMax.y)
+                                vMax.y = vertex.y;
+                            if (vertex.y < vMin.y)
+                                vMin.y = vertex.y;
+                            if (vertex.z > vMax.z)
+                                vMax.z = vertex.z;
+                            if (vertex.z < vMin.z)
+                                vMin.z = vertex.z;
+                        }
                     }
                     else if (splittedLine[0].equals("vn")) {
                         if (SWAP_ZY)
@@ -122,6 +143,12 @@ public class ModelLoader {
             e.printStackTrace();
         }
 
+        if (fixedSize) {
+            for (Vec3 vertex : vertices) {
+                // TODO: scale vertices
+            }
+        }
+
         System.out.println("Model load stats: ");
         System.out.println(" - vertices: " + vertices.size());
         System.out.println(" - normals: " + normals.size());
@@ -138,6 +165,6 @@ public class ModelLoader {
     }
 
     public static Model loadObj(int res, float scale) {
-        return asObj(MainActivity.current.getResources().openRawResource(res), scale);
+        return asObj(MainActivity.current.getResources().openRawResource(res), scale, false);
     }
 }

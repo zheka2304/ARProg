@@ -25,8 +25,31 @@ import es.ava.aruco.Marker;
 public class ARRenderer implements Renderer, IMarkerHandler{
     private HashMap<Integer, Marker> markersToRender = new HashMap<Integer, Marker>();
 
+    private void cleanUp() {
+        try {
+            long currentTime = System.currentTimeMillis();
+            Set<Integer> markerIds = markersToRender.keySet();
+            Vector<Integer> removedIds = new Vector<Integer>();
+
+            for (int id : markerIds) {
+                Marker marker = markersToRender.get(id);
+                if (marker.updatedTime + ERROR_TIME_MILLIS < currentTime) {
+                    removedIds.add(id);
+                }
+            }
+            for (int id : removedIds) {
+                markersToRender.remove(id);
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onMarkersDetected(Vector<Marker> detectedMarkers, Mat inputFrame, CameraActivity currentActivity) {
+        cleanUp();
         for (Marker marker : detectedMarkers) {
             markersToRender.put(marker.getMarkerId(), marker);
         }
@@ -34,7 +57,7 @@ public class ARRenderer implements Renderer, IMarkerHandler{
 
     @Override
     public void onNothingDetected(Mat inputFrame, CameraActivity currentActivity) {
-
+        cleanUp();
     }
 
     private MVPMatrix mvpMatrix = new MVPMatrix();
@@ -77,20 +100,11 @@ public class ARRenderer implements Renderer, IMarkerHandler{
         try {
             long currentTime = System.currentTimeMillis();
             Set<Integer> markerIds = markersToRender.keySet();
-            Vector<Integer> removedIds = new Vector<Integer>();
 
             for (int id : markerIds) {
                 Marker marker = markersToRender.get(id);
-                if (marker.updatedTime + ERROR_TIME_MILLIS < currentTime) {
-                    removedIds.add(id);
-                }
-                else
-                    onMarkerRendered(marker);
+                onMarkerRendered(marker);
             }
-            for (int id : removedIds) {
-                markersToRender.remove(id);
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
