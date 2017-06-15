@@ -12,6 +12,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import arprog.inc.ar.arprog.CameraActivity;
 import arprog.inc.ar.arprog.IMarkerHandler;
+import arprog.inc.ar.arprog.MainActivity;
 import arprog.inc.ar.arprog.R;
 import es.ava.aruco.Marker;
 
@@ -41,26 +42,28 @@ public class ARRenderer implements Renderer, IMarkerHandler{
     private void prepareTestData() {
         testShader = ShaderHelper.createShader(R.raw.default_vertex, R.raw.default_fragment);
 
-        testModel = new Model(false, true);
-        testModel.color4f(1, 1, 1, 1);
-        testModel.uv2f(0, 0);
-        testModel.vertex3f(-.5f, -.5f, 0);
-        testModel.color4f(1, 1, 1, 1);
-        testModel.uv2f(1, 0);
-        testModel.vertex3f(.5f, -.5f, 0);
-        testModel.color4f(1, 1, 1, 1);
-        testModel.uv2f(1, 1);
-        testModel.vertex3f(.5f, .5f, 0);
-        testModel.color4f(1, 1, 1, 1);
-        testModel.uv2f(0, 0);
-        testModel.vertex3f(-.5f, -.5f, 0);
-        testModel.color4f(1, 1, 1, 1);
-        testModel.uv2f(0, 1);
-        testModel.vertex3f(-.5f, .5f, 0);
-        testModel.color4f(1, 1, 1, 1);
-        testModel.uv2f(1, 1);
-        testModel.vertex3f(.5f, .5f, 0);
-        testModel.compile();
+//        testModel = new Model(false, true);
+//        testModel.color4f(1, 1, 1, 1);
+//        testModel.uv2f(0, 0);
+//        testModel.vertex3f(-.5f, -.5f, 0);
+//        testModel.color4f(1, 1, 1, 1);
+//        testModel.uv2f(1, 0);
+//        testModel.vertex3f(.5f, -.5f, 0);
+//        testModel.color4f(1, 1, 1, 1);
+//        testModel.uv2f(1, 1);
+//        testModel.vertex3f(.5f, .5f, 0);
+//        testModel.color4f(1, 1, 1, 1);
+//        testModel.uv2f(0, 0);
+//        testModel.vertex3f(-.5f, -.5f, 0);
+//        testModel.color4f(1, 1, 1, 1);
+//        testModel.uv2f(0, 1);
+//        testModel.vertex3f(-.5f, .5f, 0);
+//        testModel.color4f(1, 1, 1, 1);
+//        testModel.uv2f(1, 1);
+//        testModel.vertex3f(.5f, .5f, 0);
+//        testModel.compile();
+
+        testModel = ModelLoader.asObj(MainActivity.current.getResources().openRawResource(R.raw.cow));
 
         testModel.setTexture(TextureHelper.loadTexture(R.drawable.ar_icon_contrast));
     }
@@ -96,13 +99,9 @@ public class ARRenderer implements Renderer, IMarkerHandler{
         // switch to markers CS
         mvpMatrix.fromMarker(marker);
 
-        for (int i  = 0; i < 100; i++) {
-            mvpMatrix.translate(0, 0, .01f);
-            mvpMatrix.rotate(0, 0, 1f * i);
+        // draw test testModel
+        testModel.draw(testShader, mvpMatrix);
 
-            // draw test testModel
-            testModel.draw(testShader, mvpMatrix);
-        }
     }
 
 }
