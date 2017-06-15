@@ -41,6 +41,20 @@ public class MarkerRegistry {
             marker.Tvec = TvecCpy;
         }
 
+        public Mat getStabilizedTVec(Mat newTvec) {
+            double[] newVec = MatToList(newTvec);
+            double[] oldVec = MatToList(Tvec);
+
+            double t = 0.04;
+            double d = Math.max(Math.max(Math.abs(oldVec[0] - newVec[0]), Math.abs(oldVec[1] - newVec[1])), Math.abs(oldVec[2] - newVec[2]));
+            double k = d > t ? 0.9 : 0.4;
+            return ListToMat(new double[] {
+                    newVec[0] * k + oldVec[0] * (1 - k),
+                    newVec[1] * k + oldVec[1] * (1 - k),
+                    newVec[2] * k + oldVec[2] * (1 - k),
+            });
+        }
+
         public Mat getStabilizedRVec(Mat newRvec) {
             double[] newVec = MatToList(newRvec);
             double[] oldVec = MatToList(Rvec);

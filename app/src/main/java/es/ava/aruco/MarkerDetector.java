@@ -252,6 +252,7 @@ public class MarkerDetector {
 
 				if (data != null) {
 					newMarkers.get(i).Rvec = data.getStabilizedRVec(newMarkers.get(i).Rvec);
+					newMarkers.get(i).Tvec = data.getStabilizedTVec(newMarkers.get(i).Tvec);
 				}
 				// update data
 				MarkerRegistry.addMarker(newMarkers.get(i));

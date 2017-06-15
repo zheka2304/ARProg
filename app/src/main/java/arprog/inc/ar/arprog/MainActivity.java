@@ -23,7 +23,7 @@ import es.ava.aruco.Marker;
 
 public class MainActivity extends AppCompatActivity{
 
-    static void prepareOpenCV() {
+    public static void prepareOpenCV() {
         System.out.println("OpenCV Loaded: " + OpenCVLoader.initDebug());
     }
 
@@ -47,8 +47,8 @@ public class MainActivity extends AppCompatActivity{
 
         setContentView(R.layout.loading_layout);
 
-        prepareOpenCV();
-        RenderData.prepareAllModels();
+//        prepareOpenCV();
+//        RenderData.prepareAllModels();
 
         setContentView(R.layout.activity_main);
 

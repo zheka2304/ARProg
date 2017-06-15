@@ -19,6 +19,7 @@ public class RenderData {
         // load models
         prepareModel("cow.obj", R.raw.cow, .1f);
         prepareModel("owl.obj", R.raw.owl, .1f);
+        prepareModel("ussr.obj", R.raw.hammer_and_sickle, 10f);
     }
 
     public static void prepareAllAssets() {

@@ -1,10 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
-<<<<<<< HEAD
- * Original file: C:\\Users\\grish\\Documents\\GitHub\\ARProg\\ARProg\\openCVLibrary320\\src\\main\\aidl\\org\\opencv\\engine\\OpenCVEngineInterface.aidl
-=======
- * Original file: C:\\Users\\zheka\\Documents\\AndroidStudioProjects\\ARProg\\openCVLibrary320\\src\\main\\aidl\\org\\opencv\\engine\\OpenCVEngineInterface.aidl
->>>>>>> c747b9ce4c9e8d2b38997a6d0394c68dd1af01b8
+ * Original file: /home/user/AndroidStudioProjects/ARProg/openCVLibrary320/src/main/aidl/org/opencv/engine/OpenCVEngineInterface.aidl
  */
 package org.opencv.engine;
 /**

@@ -106,14 +106,19 @@ public class ARRenderer implements Renderer, IMarkerHandler{
         try {
             long currentTime = System.currentTimeMillis();
             Set<Integer> markerIds = markersToRender.keySet();
+            Vector<Integer> removedIds = new Vector<Integer>();
 
             for (int id : markerIds) {
                 Marker marker = markersToRender.get(id);
                 if (marker.updatedTime + ERROR_TIME_MILLIS < currentTime) {
-                    markersToRender.remove(id);
+                    removedIds.add(id);
                 }
                 else
                     onMarkerRendered(marker);
+            }
+
+            for (int id : removedIds) {
+                markersToRender.remove(id);
             }
 
         } catch (Exception e) {
