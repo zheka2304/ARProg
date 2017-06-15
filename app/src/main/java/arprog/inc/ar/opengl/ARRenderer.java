@@ -45,38 +45,9 @@ public class ARRenderer implements Renderer, IMarkerHandler{
     ModelProjectorLight projectorModel;
 
     private void prepareTestData() {
-<<<<<<< HEAD
-        testShader = ShaderHelper.createShader(R.raw.default_vertex, R.raw.default_fragment);
-
-//        testModel = new Model(false, true);
-//        testModel.color4f(1, 1, 1, 1);
-//        testModel.uv2f(0, 0);
-//        testModel.vertex3f(-.5f, -.5f, 0);
-//        testModel.color4f(1, 1, 1, 1);
-//        testModel.uv2f(1, 0);
-//        testModel.vertex3f(.5f, -.5f, 0);
-//        testModel.color4f(1, 1, 1, 1);
-//        testModel.uv2f(1, 1);
-//        testModel.vertex3f(.5f, .5f, 0);
-//        testModel.color4f(1, 1, 1, 1);
-//        testModel.uv2f(0, 0);
-//        testModel.vertex3f(-.5f, -.5f, 0);
-//        testModel.color4f(1, 1, 1, 1);
-//        testModel.uv2f(0, 1);
-//        testModel.vertex3f(-.5f, .5f, 0);
-//        testModel.color4f(1, 1, 1, 1);
-//        testModel.uv2f(1, 1);
-//        testModel.vertex3f(.5f, .5f, 0);
-//        testModel.compile();
-
-        testModel = ModelLoader.asObj(MainActivity.current.getResources().openRawResource(R.raw.cow));
-
-        testModel.setTexture(TextureHelper.loadTexture(R.drawable.ar_icon_contrast));
-=======
         testShader = RenderData.getShader("model");
         testModel = RenderData.getModel("cow.obj");
         //testModel.setTexture(RenderData.getTexture("model_texture_owl"));
->>>>>>> c747b9ce4c9e8d2b38997a6d0394c68dd1af01b8
     }
 
     @Override
@@ -116,7 +87,6 @@ public class ARRenderer implements Renderer, IMarkerHandler{
                 else
                     onMarkerRendered(marker);
             }
-
             for (int id : removedIds) {
                 markersToRender.remove(id);
             }
@@ -134,17 +104,11 @@ public class ARRenderer implements Renderer, IMarkerHandler{
         // switch to markers CS
         mvpMatrix.fromMarker(marker);
 
-<<<<<<< HEAD
-        // draw test testModel
-        testModel.draw(testShader, mvpMatrix);
-
-=======
         projectorModel.draw(mvpMatrix);
 
         mvpMatrix.translate(0, 0, .8f);
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ZERO);
         testModel.draw(testShader, mvpMatrix);
->>>>>>> c747b9ce4c9e8d2b38997a6d0394c68dd1af01b8
     }
 
 }
