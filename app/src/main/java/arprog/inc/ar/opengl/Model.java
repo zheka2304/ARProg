@@ -108,25 +108,29 @@ public class Model {
 
         int positionHandle = shader.getAttribLocation(shader.attributeNames.getPositionName());
         int colorHandle = shader.getAttribLocation(shader.attributeNames.getColorName());
-        int normalHandle = shader.getAttribLocation(shader.attributeNames.getNormalName());
-        int uvHandle = shader.getAttribLocation(shader.attributeNames.getUVName());
 
         GLES20.glEnableVertexAttribArray(positionHandle);
         GLES20.glEnableVertexAttribArray(colorHandle);
-        GLES20.glEnableVertexAttribArray(normalHandle);
-        GLES20.glEnableVertexAttribArray(uvHandle);
 
         GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, COORDS_PER_VERTEX * BYTES_PER_FLOAT, bVertices);
-        GLES20.glVertexAttribPointer(colorHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, COORDS_PER_VERTEX * BYTES_PER_FLOAT, bColors);
-        if (useNormals)
+        GLES20.glVertexAttribPointer(colorHandle, COLORS_PER_VERTEX, GLES20.GL_FLOAT, false, COLORS_PER_VERTEX * BYTES_PER_FLOAT, bColors);
+        if (useNormals) {
+            int normalHandle = shader.getAttribLocation(shader.attributeNames.getNormalName());
+            GLES20.glEnableVertexAttribArray(normalHandle);
             GLES20.glVertexAttribPointer(normalHandle, NORMAL_COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, NORMAL_COORDS_PER_VERTEX * BYTES_PER_FLOAT, bNormals);
+        }
         if (useUVs) {
+            int uvHandle = shader.getAttribLocation(shader.attributeNames.getUVName());
+            GLES20.glEnableVertexAttribArray(uvHandle);
             GLES20.glVertexAttribPointer(uvHandle, UV_COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, UV_COORDS_PER_VERTEX * BYTES_PER_FLOAT, bUVs);
         }
 
+        int textureHandle = shader.getUniformLocation(shader.attributeNames.getTextureName());
         if (currentTexture != null) {
-            int textureHandle = shader.getUniformLocation(shader.attributeNames.getTextureName());
             currentTexture.use(textureHandle);
+        }
+        else {
+            RenderData.FLAT_WHITE.use(textureHandle);
         }
 
         int matrixHandle1 = shader.getUniformLocation(shader.attributeNames.getMatrixName());

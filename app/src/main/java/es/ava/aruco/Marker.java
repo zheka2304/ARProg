@@ -25,6 +25,7 @@ import org.opencv.imgproc.Imgproc;
  *
  */
 public class Marker extends MatOfPoint2f implements Comparable<Marker>{
+	public long updatedTime = -1;
 
 	private Object3dContainer object;
 	
@@ -54,6 +55,8 @@ public class Marker extends MatOfPoint2f implements Comparable<Marker>{
 		for(int i=0;i<p.size();i++)
 			points.add(p.get(i));
 		this.fromList(points);
+
+		updatedTime = System.currentTimeMillis();
 	}
 	
 	public void draw(Mat in, Scalar color, int lineWidth, boolean writeId){

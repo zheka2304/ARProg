@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <merger version="3"><dataSet config="main"><source path="C:\Users\grish\Documents\GitHub\ARProg\ARProg\openCVLibrary320\src\main\shaders"/></dataSet><dataSet config="release"><source path="C:\Users\grish\Documents\GitHub\ARProg\ARProg\openCVLibrary320\src\release\shaders"/></dataSet></merger>
+=======
+<merger version="3"><dataSet config="main"><source path="C:\Users\zheka\Documents\AndroidStudioProjects\ARProg\openCVLibrary320\src\main\shaders"/></dataSet><dataSet config="release"><source path="C:\Users\zheka\Documents\AndroidStudioProjects\ARProg\openCVLibrary320\src\release\shaders"/></dataSet></merger>
+>>>>>>> c747b9ce4c9e8d2b38997a6d0394c68dd1af01b8

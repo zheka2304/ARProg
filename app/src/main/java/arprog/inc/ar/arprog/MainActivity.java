@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.opengl.GLES20;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,12 +17,13 @@ import org.opencv.core.Scalar;
 
 import java.util.Vector;
 
+import arprog.inc.ar.opengl.RenderData;
 import arprog.inc.ar.opengl.ShaderHelper;
 import es.ava.aruco.Marker;
 
 public class MainActivity extends AppCompatActivity{
 
-    static {
+    static void prepareOpenCV() {
         System.out.println("OpenCV Loaded: " + OpenCVLoader.initDebug());
     }
 
@@ -41,8 +43,13 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         current = this;
-
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.loading_layout);
+
+        prepareOpenCV();
+        RenderData.prepareAllModels();
+
         setContentView(R.layout.activity_main);
 
         requestCameraPermission();
@@ -53,10 +60,7 @@ public class MainActivity extends AppCompatActivity{
             public void onMarkersDetected(Vector<Marker> detectedMarkers, Mat inputFrame, CameraActivity currentActivity) {
                 for (Marker m:
                         detectedMarkers) {
-                    m.draw(inputFrame, new Scalar(255, 1, 1, 1), 1, true);
-
-                    //m.draw3dAxis(inputFrame, CameraActivity.getCameraParams(), new Scalar(255, 255, 1, 1));
-                    //m.draw3dCube(inputFrame, CameraActivity.getCameraParams(), new Scalar(255, 255, 1, 1));
+                    m.draw(inputFrame, new Scalar(255, 1, 1, 1), 1, false);
                 }
             }
 
