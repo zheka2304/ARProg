@@ -1,0 +1,3 @@
+This app has access to your camera.
+
+Use it at your own risk.
