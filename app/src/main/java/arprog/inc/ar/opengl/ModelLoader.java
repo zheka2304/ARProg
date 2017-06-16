@@ -45,9 +45,9 @@ public class ModelLoader {
         String[] splittedLine;
         splittedLine = string.split("/");
         return new FaceVertex(
-                splittedLine[0].length() > 0 ? Integer.valueOf(splittedLine[0]) : 0,
-                splittedLine[2].length() > 0 ? Integer.valueOf(splittedLine[2]) : 0,
-                splittedLine[1].length() > 0 ? Integer.valueOf(splittedLine[1]) : 0);
+                splittedLine.length > 0 && splittedLine[0].length() > 0 ? Integer.valueOf(splittedLine[0]) : 0,
+                splittedLine.length > 2 && splittedLine[2].length() > 0 ? Integer.valueOf(splittedLine[2]) : 0,
+                splittedLine.length > 1 && splittedLine[1].length() > 0 ? Integer.valueOf(splittedLine[1]) : 0);
     }
 
     public static void addVertices(Model model, Face face, ArrayList<Vec3> vertices, ArrayList<Vec3> normals,  ArrayList<Vec3> uvs){
@@ -58,10 +58,10 @@ public class ModelLoader {
         for (int i = 1; i < face.verts.size() - 1; i++){
             Vec3 vert2 = vertices.get(face.verts.get(i).vertex);
             Vec3 normal2 = normals.get(face.verts.get(i).normal);
-            Vec3 uv2 = normals.get(face.verts.get(i).uv);
+            Vec3 uv2 = uvs.get(face.verts.get(i).uv);
             Vec3 vert3 = vertices.get(face.verts.get(i + 1).vertex);
             Vec3 normal3 = normals.get(face.verts.get(i + 1).normal);
-            Vec3 uv3 = normals.get(face.verts.get(i + 1).uv);
+            Vec3 uv3 = uvs.get(face.verts.get(i + 1).uv);
             model.color4f(1, 1, 1, 1);
             model.normal3f(normal1.x, normal1.y, normal1.z);
             model.uv2f(uv1.x, uv1.y);
@@ -77,7 +77,7 @@ public class ModelLoader {
         }
     }
 
-    public static Model asObj(InputStream inputStream, float scale, boolean fixedSize) {
+    public static Model asObj(InputStream inputStream, float customScale, boolean scaleToOne) {
         String line;
         String[] splittedLine;
 
@@ -101,12 +101,12 @@ public class ModelLoader {
                     if (splittedLine[0].equals("v")) {
                         Vec3 vertex;
                         if (SWAP_ZY)
-                            vertex = (new Vec3(Float.valueOf(splittedLine[1]) * scale, Float.valueOf(splittedLine[3]) * scale, Float.valueOf(splittedLine[2]) * scale));
+                            vertex = (new Vec3(Float.valueOf(splittedLine[1]) * customScale, Float.valueOf(splittedLine[3]) * customScale, Float.valueOf(splittedLine[2]) * customScale));
                         else
-                            vertex = (new Vec3(Float.valueOf(splittedLine[1]) * scale, Float.valueOf(splittedLine[2]) * scale, Float.valueOf(splittedLine[3]) * scale));
+                            vertex = (new Vec3(Float.valueOf(splittedLine[1]) * customScale, Float.valueOf(splittedLine[2]) * customScale, Float.valueOf(splittedLine[3]) * customScale));
                         vertices.add(vertex);
 
-                        if (fixedSize) {
+                        if (scaleToOne) {
                             if (vertex.x > vMax.x)
                                 vMax.x = vertex.x;
                             if (vertex.x < vMin.x)
@@ -143,9 +143,18 @@ public class ModelLoader {
             e.printStackTrace();
         }
 
-        if (fixedSize) {
+        if (scaleToOne) {
+            float size = Math.max(Math.max(vMax.x - vMin.x, vMax.y - vMin.y), vMax.z - vMin.z);
+            float scale = customScale / size;
+
+            vTranslation.x = -vMin.x - (vMax.x - vMin.x) / 2f;
+            vTranslation.y = -vMin.y - (vMax.y - vMin.y) / 2f;
+            vTranslation.z = -vMin.z;
+
             for (Vec3 vertex : vertices) {
-                // TODO: scale vertices
+                vertex.x = (vertex.x + vTranslation.x) * scale;
+                vertex.y = (vertex.y + vTranslation.y) * scale;
+                vertex.z = (vertex.z + vTranslation.z) * scale;
             }
         }
 
@@ -165,6 +174,6 @@ public class ModelLoader {
     }
 
     public static Model loadObj(int res, float scale) {
-        return asObj(MainActivity.current.getResources().openRawResource(res), scale, false);
+        return asObj(MainActivity.current.getResources().openRawResource(res), scale, true);
     }
 }

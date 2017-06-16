@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.design.widget.FloatingActionButton xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rotate_camera"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentEnd="true"
+    android:layout_gravity="bottom|end"
+    android:layout_margin="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="16dp"
+    android:clickable="true"
+    android:contextClickable="false"
+    android:cropToPadding="false"
+    android:duplicateParentState="false"
+    android:translationZ="0dp"
+    app:backgroundTint="#6666ff"
+    app:fabSize="normal"
+    app:layout_collapseParallaxMultiplier="1.0"
+    app:srcCompat="@drawable/ar_icon_rotate" />

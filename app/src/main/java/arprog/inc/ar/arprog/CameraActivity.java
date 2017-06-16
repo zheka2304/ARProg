@@ -1,13 +1,20 @@
 package arprog.inc.ar.arprog;
 
 import android.Manifest;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -114,9 +121,9 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
         cameraView.setVisibility(SurfaceView.VISIBLE);
         setMaxResolution();
         cameraView.enableView();
-
     }
 
+    private boolean reversedLandscape = true;
     private void setupARSurfaceView() {
         // calculate view size by camera preview size
         DisplayMetrics metrics = new DisplayMetrics();
@@ -148,7 +155,16 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
         arSurfaceView.setY((height - wHeight) / 2);
         arSurfaceView.setLayoutParams(new RelativeLayout.LayoutParams(wWidth, wHeight));
 
+        LayoutInflater.from(this).inflate(R.layout.fab_rotate_button, frameLayout);
         frameLayout.addView(arSurfaceView);
+
+        findViewById(R.id.rotate_camera).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reversedLandscape = !reversedLandscape;
+                setRequestedOrientation(reversedLandscape ? ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            }
+        });
     }
 
 

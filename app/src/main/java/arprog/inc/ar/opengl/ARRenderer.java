@@ -69,8 +69,7 @@ public class ARRenderer implements Renderer, IMarkerHandler{
 
     private void prepareTestData() {
         testShader = RenderData.getShader("model");
-        testModel = RenderData.getModel("cow.obj");
-        //testModel.setTexture(RenderData.getTexture("model_texture_owl"));
+        testModel = RenderData.getModel("current");
     }
 
     @Override
@@ -120,7 +119,7 @@ public class ARRenderer implements Renderer, IMarkerHandler{
 
         projectorModel.draw(mvpMatrix);
 
-        mvpMatrix.translate(0, 0, .8f);
+        mvpMatrix.translate(0, 0, .4f);
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ZERO);
         testModel.draw(testShader, mvpMatrix);
     }

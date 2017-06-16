@@ -1,5 +1,6 @@
 package arprog.inc.ar.opengl;
 
+import java.io.InputStream;
 import java.util.HashMap;
 
 import arprog.inc.ar.arprog.R;
@@ -17,9 +18,11 @@ public class RenderData {
 
     public static void prepareAllModels() {
         // load models
-        prepareModel("cow.obj", R.raw.cow, .1f);
-        prepareModel("owl.obj", R.raw.owl, .1f);
-        prepareModel("ussr.obj", R.raw.hammer_and_sickle, 10f);
+        prepareModel("cow.obj", R.raw.cow, 1.5f);
+        prepareModel("owl.obj", R.raw.owl, 1.5f);
+        prepareModel("ussr.obj", R.raw.hammer_and_sickle, 1.5f);
+
+        prepareModel("current", R.raw.hammer_and_sickle, 1.5f);
     }
 
     public static void prepareAllAssets() {
@@ -38,6 +41,10 @@ public class RenderData {
 
     public static void prepareModel(String name, int res, float scale) {
         preparedModels.put(name, ModelLoader.loadObj(res, scale));
+    }
+
+    public static void prepareModel(String name, InputStream is) {
+        preparedModels.put(name, ModelLoader.asObj(is, 1, true));
     }
 
     public static Model getModel(String name) {

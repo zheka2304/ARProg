@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/start_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,10 +9,76 @@
 
     <Button
         android:id="@+id/start_button"
-        style="@style/Widget.AppCompat.Button.Colored"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Start" />
+        android:text="start"
+        android:textColor="#6666ff"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/open_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:contextClickable="false"
+        android:cropToPadding="false"
+        android:duplicateParentState="false"
+        app:backgroundTint="#6666ff"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/ar_icon_get_file"
+        android:layout_marginBottom="16dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_help"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/open_file"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:contextClickable="false"
+        android:cropToPadding="false"
+        android:duplicateParentState="false"
+        app:backgroundTint="#6666ff"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/ar_icon_open_help" />
+
+    <TextView
+        android:id="@+id/current_model_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:keepScreenOn="true"
+        android:text="current model:\nussr.obj"
+        android:textColor="#cccccc"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_above="@+id/start_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="17dp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:keepScreenOn="true"
+        android:text="0.1 PRE-ALPHA"
+        android:textColor="#cccccc"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 </RelativeLayout>
