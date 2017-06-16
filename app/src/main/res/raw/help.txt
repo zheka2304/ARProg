@@ -2,6 +2,6 @@ You must have ARuco marker (Any marker is suitable). Marker generator: http://te
 
 How to use:
 1) Choose your .obj file or native model
-2) Make the whole marker be in camera vision (dont bring your phone too close or far away)
+2) Whole marker must be in camera field of view (don't bring your phone too close or far away)
 
-If the picture is reversed press reverse button
+If the picture is reversed press reverse button.

@@ -3,6 +3,7 @@ package arprog.inc.ar.arprog;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
